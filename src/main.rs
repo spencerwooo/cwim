@@ -14,14 +14,20 @@ use walkdir::WalkDir;
 use regex::Regex;
 use std::fs;
 use std::path::PathBuf;
+use std::time::Instant;
 // use std::collections::HashMap;
 use unicode_segmentation::UnicodeSegmentation;
 
 // Cli argument container
 #[derive(StructOpt)]
+#[structopt(name = "cwim - Count Words Inside a Markdown file.")]
 struct Cli {
-  // The path to the file
-  #[structopt(parse(from_os_str))]
+  /// Verbose mode (-v, -vv, etc.)
+  #[structopt(short, long, parse(from_occurrences))]
+  verbose: u8,
+
+  /// Target file or target directory
+  #[structopt(name = "FILE_OR_PATH", parse(from_os_str))]
   path: PathBuf,
 }
 
@@ -58,14 +64,33 @@ fn process_path(path: PathBuf) -> Vec<PathBuf> {
 }
 
 fn main() -> Result<(), ExitFailure> {
-  println!("cwim - Count Words Inside a Markdown file.");
-
   let args = Cli::from_args();
 
+  // get cwim version
+  const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+
+  // measure elapsed time
+  let now = Instant::now();
+
+  // find all markdown files
   let list_of_md_files = process_path(args.path);
+
+  let mut total_word_count = 0;
+  let mut total_line_count = 0;
+  let mut total_blank_line_count = 0;
+  let total_file_count = list_of_md_files.len();
+
+  // count words inside markdown file
   for entry in list_of_md_files {
-    println!("-------------------------------");
-    println!("{}", entry.to_string_lossy());
+    if args.verbose > 0 {
+      println!(
+        "{}",
+        std::iter::repeat("-")
+          .take(entry.to_string_lossy().len())
+          .collect::<String>()
+      );
+      println!("{}", entry.to_string_lossy());
+    }
 
     // See here for error handling: https://rust-cli.github.io/book/tutorial/errors.html
     let content = std::fs::read_to_string(entry.clone())
@@ -109,10 +134,13 @@ fn main() -> Result<(), ExitFailure> {
         let words: Vec<&str> = clean_line.unicode_words().collect();
         word_count = word_count + words.len();
 
-      // debug
-      // for word in words {
-      //   println!("{}", word);
-      // }
+        // debug
+        if args.verbose > 1 {
+          for word in words {
+            print!("{} / ", word);
+          }
+          println!("");
+        }
       } else {
         blank_lines_count = blank_lines_count + 1;
       }
@@ -129,6 +157,26 @@ fn main() -> Result<(), ExitFailure> {
     } else {
       println!("Reading time: {} mins", reading_time);
     }
+
+    total_word_count = total_word_count + word_count;
+    total_line_count = total_line_count + line_count;
+    total_blank_line_count = total_blank_line_count + blank_lines_count;
+  }
+
+  // print stats
+  let elapsed_time = now.elapsed().as_secs_f64();
+  let count_file_speed = total_file_count as f64 / elapsed_time;
+  let count_word_speed = total_word_count as f64 / elapsed_time;
+  let total_reading_time = total_word_count / 250;
+  println!(
+    "github.com/spencerwooo/cwim v{} / T = {:.3}s / ({:.1} files/s {:.1} words/s)",
+    VERSION, elapsed_time, count_file_speed, count_word_speed
+  );
+
+  if total_reading_time < 1 {
+    println!("Total reading time: less than 1 min");
+  } else {
+    println!("Total reading time: {} mins", total_reading_time);
   }
 
   Ok(())
