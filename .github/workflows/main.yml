@@ -1,4 +1,4 @@
-name: CI build and release
+name: CI Release
 
 on:
   release:
@@ -9,7 +9,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
         rust: [stable]
 
     steps:
@@ -22,15 +23,16 @@ jobs:
         uses: actions/checkout@master
 
       - name: Run build scripts
-        run: cargo build --release --verbose
+        id: run_build_scripts
+        run: cargo build --release
 
-  release:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Upload the artifacts
-        uses: skx/github-action-publish-binaries@master
+      - name: Upload release asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: "target/release/cwim"
+          upload_url: ${{ steps.run_build_scripts.outputs.upload_url }}
+          asset_path: ./target/release/cwim
+          asset_name: cwim
+          asset_content_type: application/x-sharedlib
