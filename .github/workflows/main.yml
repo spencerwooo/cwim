@@ -19,10 +19,8 @@ jobs:
         rust-version: ${{ matrix.rust }}
     - name: Checkout the repository
       uses: actions/checkout@master
-    - name: Build release artifacts
-      uses: skx/github-action-build@master
-      with:
-        builder: cargo build --release --verbose
+    - name: Run build scripts
+      run: cargo build --release --verbose
     - name: Upload the artifacts
       uses: skx/github-action-publish-binaries@master
       env:
