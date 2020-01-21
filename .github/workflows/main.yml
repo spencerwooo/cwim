@@ -5,7 +5,7 @@ on:
     types: [created]
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -24,6 +24,10 @@ jobs:
       - name: Run build scripts
         run: cargo build --release --verbose
 
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Upload the artifacts
         uses: skx/github-action-publish-binaries@master
         env:
