@@ -259,7 +259,7 @@ fn main() -> Result<(), ExitFailure> {
     );
 
     total_word_count = total_word_count + word_count;
-    total_line_count = total_line_count + line_count;
+    total_line_count = total_line_count + line_count + blank_lines_count;
     total_blank_line_count = total_blank_line_count + blank_lines_count;
 
     let truncate_entry = truncate_path(entry.clone(), base.clone());
