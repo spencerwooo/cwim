@@ -13,7 +13,7 @@ use failure::ResultExt;
 // Find markdown files recursively
 use walkdir::WalkDir;
 
-// unicode word seperator (CJK compatible)
+// unicode word seperator (CJK friendly)
 use unicode_segmentation::UnicodeSegmentation;
 
 // print tabular outputs
@@ -28,7 +28,7 @@ use std::time::Instant;
 
 // Cli argument container
 #[derive(StructOpt)]
-#[structopt(name = "cwim - Count Words Inside a Markdown file. (CJK compatible)")]
+#[structopt(name = "cwim - Count Words Inside a Markdown file. (CJK friendly)")]
 struct Cli {
   /// Verbose mode (-v, -vv, etc.)
   #[structopt(short, long, parse(from_occurrences))]
@@ -303,7 +303,7 @@ fn main() -> Result<(), ExitFailure> {
   };
 
   println!(
-    "cwim - Count Words Inside a Markdown file. (CJK compatible)\n\n  Found {} markdown file(s).\n",
+    "cwim - Count Words Inside a Markdown file. (CJK friendly)\n\n  Found {} markdown file(s).\n",
     total_file_count
   );
   println!(
