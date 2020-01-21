@@ -7,7 +7,7 @@
 
   ![](https://img.shields.io/badge/CJK-friendly-orange?logo=markdown)
   ![](https://img.shields.io/badge/rust-2018-000000?logo=rust)
-  ![](https://github.com/spencerwooo/cwim/workflows/CI%20build%20and%20release/badge.svg)
+  ![](https://github.com/spencerwooo/cwim/workflows/CI%20Release/badge.svg)
 </div>
 
 ## Welcome
