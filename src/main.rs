@@ -20,12 +20,11 @@ use unicode_segmentation::UnicodeSegmentation;
 use prettytable::format;
 use prettytable::Table;
 
-use std::fs;
 use regex::Regex;
-use std::time::Instant;
-use std::path::PathBuf;
 use std::collections::HashMap;
-
+use std::fs;
+use std::path::PathBuf;
+use std::time::Instant;
 
 // Cli argument container
 #[derive(StructOpt)]
@@ -49,6 +48,7 @@ struct Stat {
   stat_reading_time: String,
 }
 
+// Instantiate new struct: Stat
 impl Stat {
   fn new(
     stat_all_lines: usize,
@@ -94,7 +94,10 @@ fn process_path(path: PathBuf) -> Vec<PathBuf> {
       .filter_map(|e| e.ok())
     {
       let file_name = entry.file_name().to_string_lossy();
-      if file_name.ends_with(".md") {
+      if file_name.ends_with(".md")
+        || file_name.ends_with(".mdown")
+        || file_name.ends_with(".markdown")
+      {
         list_of_md_file_path.push(entry.path().to_path_buf());
       }
     }
@@ -120,6 +123,12 @@ fn main() -> Result<(), ExitFailure> {
 
   // find all markdown files
   let list_of_md_files = process_path(args.path);
+
+  let is_single_file = if list_of_md_files.len() == 1 {
+    true
+  } else {
+    false
+  };
 
   // all words in query
   let mut total_word_count = 0;
@@ -262,14 +271,24 @@ fn main() -> Result<(), ExitFailure> {
     total_line_count = total_line_count + line_count + blank_lines_count;
     total_blank_line_count = total_blank_line_count + blank_lines_count;
 
-    let truncate_entry = truncate_path(entry.clone(), base.clone());
-    stats_table.add_row(row![
-      truncate_entry,
-      stats[&entry].stat_all_lines,
-      stats[&entry].stat_blank_lines,
-      stats[&entry].stat_word_count,
-      stats[&entry].stat_reading_time
-    ]);
+    if is_single_file {
+      stats_table.add_row(row![
+        &entry.to_string_lossy(),
+        stats[&entry].stat_all_lines,
+        stats[&entry].stat_blank_lines,
+        stats[&entry].stat_word_count,
+        stats[&entry].stat_reading_time
+      ]);
+    } else {
+      let truncate_entry = truncate_path(entry.clone(), base.clone());
+      stats_table.add_row(row![
+        truncate_entry,
+        stats[&entry].stat_all_lines,
+        stats[&entry].stat_blank_lines,
+        stats[&entry].stat_word_count,
+        stats[&entry].stat_reading_time
+      ]);
+    }
   }
 
   // print stats
@@ -288,7 +307,7 @@ fn main() -> Result<(), ExitFailure> {
     total_file_count
   );
   println!(
-    "  github.com/spencerwooo/cwim  v{}  T={:.3}s  ({:.1} files/s {:.1} words/s)\n",
+    "  github.com/spencerwooo/cwim  v{}  T={:.3}s  ({:.1} files/s {:.1} words/s)",
     VERSION, elapsed_time, count_file_speed, count_word_speed
   );
 
