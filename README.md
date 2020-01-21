@@ -36,19 +36,27 @@ ARGS:
 
 We can run `cwim` against a single Markdown file:
 
-![](https://i.loli.net/2020/01/21/ur2tFDelKhYI6vO.png)
+```bash
+cwim <MARKDOWN_FILE_NAME>.md # .mdown || .markdown
+```
+
+![](https://i.loli.net/2020/01/21/5FZEAgs6ymYvU3u.png)
 
 We can also feed `cwim` a folder / directory path:
 
-![](https://i.loli.net/2020/01/21/gkAD12RmMcypsxK.png)
+```bash
+cwim <DIRECTORY_PATH>
+```
+
+![](https://i.loli.net/2020/01/21/IfrKHMux7eoAhL2.png)
 
 `cwim` is fast even when counting many files:
 
-![](https://i.loli.net/2020/01/21/EyTve6gr2zQZK3M.png)
+![](https://i.loli.net/2020/01/21/zDlUrhcOHCba951.png)
 
 Run `cwim -h` for more information:
 
-![](https://i.loli.net/2020/01/21/Lo8nRfyOjxkY6V7.png)
+![](https://i.loli.net/2020/01/21/7Y9WXebxtCDhnz4.png)
 
 ## Development
 
@@ -69,7 +77,7 @@ cargo run
 - Run `cwim` with command line arguments:
 
 ```bash
-cargo run -- <args>
+cargo run -- <ARGS>
 ```
 
 ## How does cwim work?
