@@ -1,0 +1,31 @@
+name: CI build and release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        rust: [stable]
+
+    steps:
+    - name: Install Rust toolchain
+      uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: ${{ matrix.rust }}
+    - name: Checkout the repository
+      uses: actions/checkout@master
+    - name: Build release artifacts
+      uses: skx/github-action-build@master
+      with:
+        builder: cargo build --release --verbose
+    - name: Upload the artifacts
+      uses: skx/github-action-publish-binaries@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: 'target/release/cwim'
