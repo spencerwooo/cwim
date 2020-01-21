@@ -14,7 +14,7 @@
 
 **c • wim** /c-wɪm/
 
-`cwim` is a command line tool for counting words inside a markdown file / markdown files. Written in pure Rust, `cwim` is fast, small and is compatible with almost any Unicode text segmentation.
+`cwim` is a command line tool for counting words inside a markdown file / markdown files. Written in pure Rust, `cwim` is fast, minimal and is compatible with almost any Unicode text segmentation.
 
 ## Usage
 
