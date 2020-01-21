@@ -1,38 +1,38 @@
-name: CI Release
+name: Publish
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - "*"
 
 jobs:
-  build:
+  publish:
+    name: Publish for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # os: [ubuntu-latest, windows-latest, macOS-latest]
-        os: [ubuntu-latest]
-        rust: [stable]
+        include:
+          - os: ubuntu-latest
+            artifact_name: cwim
+            asset_name: cwim-linux-amd64
+          - os: windows-latest
+            artifact_name: cwim.exe
+            asset_name: cwim-windows-amd64
+          - os: macos-latest
+            artifact_name: cwim
+            asset_name: cwim-macos-amd64
 
     steps:
-      - name: Install Rust toolchain
-        uses: hecrj/setup-rust-action@v1
+      - uses: hecrj/setup-rust-action@v1-release
         with:
-          rust-version: ${{ matrix.rust }}
-
-      - name: Checkout the repository
-        uses: actions/checkout@master
-
-      - name: Run build scripts
-        id: run_build_scripts
-        run: cargo build --release
-
-      - name: Upload release asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rust-version: stable
+      - uses: actions/checkout@v1
+      - name: Build
+        run: cargo build --release --locked
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v1-release
         with:
-          upload_url: ${{ steps.run_build_scripts.outputs.upload_url }}
-          asset_path: ./target/release/cwim
-          asset_name: cwim
-          asset_content_type: application/x-sharedlib
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/release/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
