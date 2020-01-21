@@ -5,9 +5,10 @@
 
   🎰 <em>cwim - Count Words Inside a Markdown file. (CJK friendly)</em>
 
-  ![](https://img.shields.io/badge/CJK-friendly-orange?logo=markdown)
+  [![](https://github.com/spencerwooo/cwim/workflows/CI%20Release/badge.svg)](https://github.com/spencerwooo/cwim/actions)
+  ![](https://img.shields.io/badge/CJK-friendly-1bb7ea?logo=markdown)
   ![](https://img.shields.io/badge/rust-2018-000000?logo=rust)
-  ![](https://github.com/spencerwooo/cwim/workflows/CI%20Release/badge.svg)
+  [![GitHub](https://img.shields.io/github/license/spencerwooo/cwim)](LICENSE)
 </div>
 
 ## Welcome
