@@ -14,17 +14,40 @@
 
 **c • wim** /c-wɪm/
 
+```
+cwim - Count Words Inside a Markdown file. (CJK friendly) 0.1.0
+
+USAGE:
+    cwim [FLAGS] <FILE_OR_PATH>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+    -v, --verbose    Verbose mode (-v, -vv, etc.)
+
+ARGS:
+    <FILE_OR_PATH>    Target file or target directory
+```
+
 `cwim` is a command line tool for counting words inside a markdown file / markdown files. Written in pure Rust, `cwim` is fast, minimal and is compatible with almost any Unicode text segmentation.
 
 ## Usage
 
 We can run `cwim` against a single Markdown file:
 
+![](https://i.loli.net/2020/01/21/ur2tFDelKhYI6vO.png)
+
 We can also feed `cwim` a folder / directory path:
+
+![](https://i.loli.net/2020/01/21/gkAD12RmMcypsxK.png)
 
 `cwim` is fast even when counting many files:
 
+![](https://i.loli.net/2020/01/21/EyTve6gr2zQZK3M.png)
+
 Run `cwim -h` for more information:
+
+![](https://i.loli.net/2020/01/21/Lo8nRfyOjxkY6V7.png)
 
 ## Development
 
