@@ -1,4 +1,4 @@
-name: Publish
+name: CI Release
 
 on:
   push:
@@ -13,18 +13,18 @@ jobs:
       matrix:
         # This should work with only the `include`s but it currently doesn't because of this bug:
         # https://github.community/t5/How-to-use-Git-and-GitHub/GitHub-Actions-Matrix-options-dont-work-as-documented/td-p/29558
-        # os: [ubuntu-latest, windows-latest, macos-latest]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
             artifact_name: cwim
             release_name: cwim-linux-amd64
-          # - os: windows-latest
-          #   artifact_name: cwim.exe
-          #   release_name: cwim-windows-amd64.exe
-          # - os: macos-latest
-          #   artifact_name: cwim
-          #   release_name: cwim-macos-amd64
+          - os: windows-latest
+            artifact_name: cwim.exe
+            release_name: cwim-windows-amd64.exe
+          - os: macos-latest
+            artifact_name: cwim
+            release_name: cwim-macos-amd64
 
     steps:
       - name: Setup rust environment
