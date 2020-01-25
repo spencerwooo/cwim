@@ -68,6 +68,22 @@ cwim -h
 
 ![](https://i.loli.net/2020/01/21/7Y9WXebxtCDhnz4.png)
 
+## Installation
+
+Grab the latest version of OS-specific `cwim` here:
+[cwim - Releases](https://github.com/spencerwooo/cwim/releases/latest)
+
+Then give the downloaded executable permissions to run, and move the executable
+to $PATH:
+
+```bash
+# Give sufficient permissions
+sudo chmod +x cwim
+
+# Move to $PATH
+sudo mv cwim /usr/bin
+```
+
 ## Development
 
 You'll need to install Rust on your local machine first, that includes `rustc`, `cargo` and other necessary toolkits. Then:
